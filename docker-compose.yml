@@ -1,0 +1,13 @@
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: dockerfile
+
+    container_name: download-bot
+    restart: unless-stopped
+
+    network_mode: host
+
+    env_file:
+      - .env
