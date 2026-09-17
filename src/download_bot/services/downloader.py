@@ -25,7 +25,13 @@ class YouTubeDownloader:
 
         for height in limits:
             options: yt_dlp._Params = {
-                "format": f"bestvideo[height<={height}]+bestaudio/best[height<={height}]/best",
+                "format": (
+                    f"bestvideo[height<={height}][vcodec^=avc1]+"
+                    f"bestaudio[acodec^=mp4a]/"
+                    f"best[height<={height}][vcodec^=avc1][acodec^=mp4a]/"
+                    f"bestvideo[height<={height}]+bestaudio/"
+                    f"best[height<={height}]/best"
+                ),
                 "outtmpl": str(directory / "%(id)s.%(ext)s"),
                 "merge_output_format": "mp4",
                 "noplaylist": True,
