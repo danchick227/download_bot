@@ -7,10 +7,12 @@ from aiogram.types import FSInputFile, Message
 
 from download_bot.services.downloader import YouTubeDownloader
 from download_bot.services.parser import extract_youtube_url
+from download_bot.services.thumbnail import ThumbnailService
 
 
 router = Router()
 downloader = YouTubeDownloader()
+thumbnail_service = ThumbnailService()
 
 
 def _is_too_large_error(error: Exception) -> bool:
@@ -43,9 +45,11 @@ async def youtube_handler(message: Message) -> None:
                         Path(temp_dir),
                         max_height=max_height,
                     )
+                    thumbnail_path = await thumbnail_service.create(path)
 
                     await message.reply_video(
                         video=FSInputFile(path),
+                        thumbnail=FSInputFile(thumbnail_path),
                     )
 
                 await status_message.delete()
